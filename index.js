@@ -1,4 +1,4 @@
-require("dotenv").config(); // eslint-disable-line
+require("dotenv").config();
 const app = require("./source/app");
 
 const port = process.env.APP_PORT;

@@ -1,5 +1,5 @@
-require("dotenv").config(); // eslint-disable-line
-const mysql = require("mysql2/promise"); // eslint-disable-line
+require("dotenv").config();
+const mysql = require("mysql2/promise");
 
 const database = mysql.createPool({
   host: process.env.DB_HOST,
@@ -15,7 +15,7 @@ database
     console.log("Database connection established");
   })
   .catch((error) => {
-    console.error("Database connection failed: ", error);
+    console.error("Database connection failed: ", error.message);
   });
 
 module.exports = database;

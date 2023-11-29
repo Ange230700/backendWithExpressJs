@@ -1,10 +1,10 @@
-const express = require("express"); // eslint-disable-line
+const express = require("express");
 
 const app = express();
 app.use(express.json());
 
 const welcome = (request, response) => {
-  response.send("Welcome to the Movies API!");
+  response.status(200).send("Welcome to the Movies API!");
 };
 
 const movieControllers = require("./controllers/movieControllers");
