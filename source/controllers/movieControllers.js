@@ -12,4 +12,20 @@ const getMovies = (request, response) => {
     });
 };
 
-module.exports = { getMovies };
+const getMovieById = (request, response) => {
+  const { id } = request.params;
+  database
+    .query("SELECT * FROM `movies` WHERE `id` = ?", [id])
+    .then((result) => {
+      response.json(result[0]);
+    })
+    .catch((error) => {
+      console.error("Error retrieving movie from database: ", error);
+      response.status(500).send("Error retrieving movie from database");
+    });
+};
+
+module.exports = {
+  getMovies,
+  getMovieById,
+};

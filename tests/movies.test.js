@@ -1,5 +1,8 @@
 const {
-  describe, it, expect, afterAll,
+  it,
+  expect,
+  afterAll,
+  describe,
 } = require("@jest/globals");
 const request = require("supertest");
 const app = require("../source/app");
@@ -17,6 +20,14 @@ describe("GET /", () => {
 describe("GET /api/movies", () => {
   it("should return a list of movies", async () => {
     const response = await request(app).get("/api/movies");
+    expect(response.headers["content-type"]).toMatch(/json/);
+    expect(response.statusCode).toBe(200);
+  });
+});
+
+describe("GET /api/movies/:id", () => {
+  it("should return a single movie", async () => {
+    const response = await request(app).get("/api/movies/1");
     expect(response.headers["content-type"]).toMatch(/json/);
     expect(response.statusCode).toBe(200);
   });
