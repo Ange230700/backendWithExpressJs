@@ -18,4 +18,4 @@ database
     console.error("Database connection failed: ", error);
   });
 
-module.exports = { database };
+module.exports = database;
