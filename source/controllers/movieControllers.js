@@ -28,7 +28,41 @@ const getMovieById = (request, response) => {
     });
 };
 
+const postMovie = (request, response) => {
+  const {
+    title,
+    director,
+    year,
+    color,
+    duration,
+  } = request.body;
+  database
+    .query(
+      "INSERT INTO `movies` (`title`, `director`, `year`, `color`, `duration`) VALUES (?, ?, ?, ?, ?)",
+      [title, director, year, color, duration],
+    )
+    .then((result) => {
+      const id = result[0].insertId;
+      return response.status(201).json({
+        id,
+        title,
+        director,
+        year,
+        color,
+        duration,
+      });
+    })
+    .catch((error) => {
+      if (!title || !director || !year || !color || !duration) {
+        return response.status(400).send("Missing required fields");
+      }
+      console.error("Error creating movie in database: ", error);
+      return response.status(500).send("Error creating movie in database");
+    });
+};
+
 module.exports = {
   getMovies,
   getMovieById,
+  postMovie,
 };

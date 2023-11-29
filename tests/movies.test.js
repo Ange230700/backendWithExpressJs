@@ -38,6 +38,38 @@ describe("GET /api/movies/:id", () => {
   });
 });
 
+describe("POST /api/movies", () => {
+  it("should create a new movie", async () => {
+    const response = await request(app).post("/api/movies").send({
+      title: "Dr. Strange",
+      director: "Scott Derrickson",
+      year: "2016",
+      color: "1",
+      duration: 99,
+    });
+    expect(response.statusCode).toBe(201);
+    expect(response.headers["content-type"]).toMatch(/json/);
+    expect(response.body).toEqual({
+      id: expect.any(Number),
+      title: "Dr. Strange",
+      director: "Scott Derrickson",
+      year: "2016",
+      color: "1",
+      duration: 99,
+    });
+  });
+
+  it("should return a 400 error if the movie is invalid", async () => {
+    const response = await request(app).post("/api/movies").send({
+      title: "Dr. Strange",
+      director: "Scott Derrickson",
+      year: "2016",
+      color: "1",
+    });
+    expect(response.statusCode).toBe(400);
+  });
+});
+
 afterAll(async () => {
   await database.end((error) => {
     if (error) console.error(error.message);

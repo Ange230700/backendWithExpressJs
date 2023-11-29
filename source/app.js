@@ -10,4 +10,6 @@ app.get("/", welcome.welcome);
 app.get("/api/movies", movieControllers.getMovies);
 app.get("/api/movies/:id", movieControllers.getMovieById);
 
+app.post("/api/movies", movieControllers.postMovie);
+
 module.exports = app;
