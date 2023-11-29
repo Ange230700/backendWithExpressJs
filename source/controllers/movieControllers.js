@@ -17,7 +17,10 @@ const getMovieById = (request, response) => {
   database
     .query("SELECT * FROM `movies` WHERE `id` = ?", [id])
     .then((result) => {
-      response.json(result[0]);
+      if (result[0].length === 0) {
+        return response.status(404).send("Movie not found");
+      }
+      return response.json(result[0][0]);
     })
     .catch((error) => {
       console.error("Error retrieving movie from database: ", error);

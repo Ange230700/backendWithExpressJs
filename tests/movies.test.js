@@ -31,6 +31,11 @@ describe("GET /api/movies/:id", () => {
     expect(response.headers["content-type"]).toMatch(/json/);
     expect(response.statusCode).toBe(200);
   });
+
+  it("should return a 404 error if the movie is not found", async () => {
+    const response = await request(app).get("/api/movies/999999");
+    expect(response.statusCode).toBe(404);
+  });
 });
 
 afterAll(async () => {
