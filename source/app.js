@@ -12,4 +12,6 @@ app.get("/api/movies/:id", movieControllers.getMovieById);
 
 app.post("/api/movies", movieControllers.postMovie);
 
+app.put("/api/movies/:id", movieControllers.putMovie);
+
 module.exports = app;
