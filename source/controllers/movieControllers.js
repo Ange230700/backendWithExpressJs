@@ -33,27 +33,28 @@ const postMovie = (request, response) => {
     title,
     director,
     year,
-    color,
+    studio,
     duration,
   } = request.body;
   database
     .query(
-      "INSERT INTO `movies` (`title`, `director`, `year`, `color`, `duration`) VALUES (?, ?, ?, ?, ?)",
-      [title, director, year, color, duration],
+      "INSERT INTO `movies` (`title`, `director`, `year`, `studio`, `duration`) VALUES (?, ?, ?, ?, ?)",
+      [title, director, year, studio, duration],
     )
     .then((result) => {
       const id = result[0].insertId;
-      return response.status(201).json({
+      const insertedMovie = {
         id,
         title,
         director,
         year,
-        color,
+        studio,
         duration,
-      });
+      };
+      return response.status(201).json(insertedMovie);
     })
     .catch((error) => {
-      if (!title || !director || !year || !color || !duration) {
+      if (!title || !director || !year || !studio || !duration) {
         return response.status(400).send("Missing required fields");
       }
       console.error("Error creating movie in database: ", error);
@@ -67,14 +68,14 @@ const putMovie = (request, response) => {
     title,
     director,
     year,
-    color,
+    studio,
     duration,
   } = request.body;
 
   database
     .query(
-      "UPDATE `movies` SET `title` = ?, `director` = ?, `year` = ?, `color` = ?, `duration` = ? WHERE `id` = ?",
-      [title, director, year, color, duration, id],
+      "UPDATE `movies` SET `title` = ?, `director` = ?, `year` = ?, `studio` = ?, `duration` = ? WHERE `id` = ?",
+      [title, director, year, studio, duration, id],
     )
     .then((result) => {
       if (result[0].affectedRows === 0) {
@@ -83,11 +84,27 @@ const putMovie = (request, response) => {
       return response.status(200).send("Movie updated");
     })
     .catch((error) => {
-      if (!title || !director || !year || !color || !duration) {
+      if (!title || !director || !year || !studio || !duration) {
         return response.status(400).send("Missing required fields");
       }
       console.error("Error updating movie in database: ", error);
       return response.status(500).send("Error updating movie in database");
+    });
+};
+
+const deleteMovie = (request, response) => {
+  const { id } = request.params;
+  database
+    .query("DELETE FROM `movies` WHERE `id` = ?", [id])
+    .then((result) => {
+      if (result[0].affectedRows === 0) {
+        return response.status(404).send("Movie not found");
+      }
+      return response.status(200).send("Movie deleted");
+    })
+    .catch((error) => {
+      console.error("Error deleting movie from database: ", error);
+      return response.status(500).send("Error deleting movie from database");
     });
 };
 
@@ -96,4 +113,5 @@ module.exports = {
   getMovieById,
   postMovie,
   putMovie,
+  deleteMovie,
 };
